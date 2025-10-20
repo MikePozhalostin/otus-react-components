@@ -3,14 +3,14 @@ import "./H2Component.css"
 
 export interface IH2Props {
   title: string;
-  childs: Array<IH3Props>;
+  childs: Array<IH3Props> | undefined;
 }
 
 const H2Component = (props: IH2Props) => {
   return (
     <>
       <h2 className="h2-color">{props.title}</h2>
-      {props.childs.map((ch) => (
+      {props.childs && props.childs.map((ch) => (
         <H3Component text={ch.text} title={ch.title} />
       ))}
     </>
