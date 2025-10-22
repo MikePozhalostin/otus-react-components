@@ -1,47 +1,30 @@
+import { useState } from "react";
 import "./App.css";
-import H1Component from "./components/H1Component/H1Component";
+import RequestDataComponent from "./components/RequestDataComponent/RequestDataComponent";
+import axios from "axios";
 
 function App() {
-  const contents = [
-    {
-      title: "React",
-      childs: [
-        {
-          title: "Components",
-          childs: [
-            {
-              title: "Props",
-              text: "Отображение данных, полученных из родительского компонета",
-              childs: [],
-            },
-            {
-              title: "State",
-              text: "Управление состоянием компонента",
-              childs: [],
-            },
-          ],
-        },
-        {
-          title: "Router",
-          childs: [
-            {
-              title: "Router",
-              text: "Управление маршрутизацией и навигацией",
-              childs: [],
-            },
-          ],
-        },
-      ],
-    },
-  ];
+  const [data, setData] = useState<string | undefined>(undefined);
+  const [isError, setIsError] = useState<boolean>(false);
+
+  const handleClick = () => {
+    setData(undefined);
+    setIsError(false);
+
+    axios.get('https://catfact.ninja/facts')
+      .then(response => {
+        setData(JSON.stringify(response.data));
+      })
+      .catch(error => {
+        setIsError(true);
+        setData(JSON.stringify(error.message));
+      });
+  }
 
   return (
     <>
-      {contents.map((content) => (
-        <>
-          <H1Component title={content.title} childs={content.childs}/>
-        </>
-      ))}
+      <button onClick={handleClick}>Get data</button>
+      { data && <RequestDataComponent text={data} isError={isError} />}
     </>
   );
 }
