@@ -1,30 +1,21 @@
-import { useState } from "react";
+import { BrowserRouter, Route, Routes } from "react-router";
 import "./App.css";
-import RequestDataComponent from "./components/RequestDataComponent/RequestDataComponent";
-import axios from "axios";
+import HomePage from "./components/HomePage/HomePage";
+import Login from "./components/Login/Login";
+import Register from "./components/Register/Register";
+import NotFound from "./components/NotFound/NotFound";
 
 function App() {
-  const [data, setData] = useState<string | undefined>(undefined);
-  const [isError, setIsError] = useState<boolean>(false);
-
-  const handleClick = () => {
-    setData(undefined);
-    setIsError(false);
-
-    axios.get('https://catfact.ninja/facts')
-      .then(response => {
-        setData(JSON.stringify(response.data));
-      })
-      .catch(error => {
-        setIsError(true);
-        setData(JSON.stringify(error.message));
-      });
-  }
-
   return (
     <>
-      <button onClick={handleClick}>Get data</button>
-      { data && <RequestDataComponent text={data} isError={isError} />}
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<HomePage />}></Route>
+          <Route path="/login" element={<Login />}></Route>
+          <Route path="/register" element={<Register />}></Route>
+          <Route path="*" element={<NotFound />}></Route>
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }
